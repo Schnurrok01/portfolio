@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;-webkit-text-size-adjust:100%}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>David Schnur | Portfolio</title>
 <meta name="description" content="Portfolio von David Schnur, Technischer Projektmanager mit Hintergrund in Physik, Biomechanik und Softwareentwicklung.">
 <meta property="og:title" content="David Schnur | Portfolio">
@@ -234,10 +240,12 @@ svg .lbl{fill:var(--ink);font-family:var(--f-body);font-size:13px;font-weight:60
 .ico{flex:none;display:block}
 .crow a.vl{color:var(--ink);text-underline-offset:3px;user-select:text}
 .li-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:var(--ink)!important;color:var(--paper)!important;border-color:var(--ink)!important}
-@media (max-width:420px){.li-link span{display:none}}
+@media (max-width:420px){.li-link span{display:none}nav.top a.nl{padding:6px 8px;font-size:13.5px}nav.top ul{gap:2px}}
 footer{padding-block:28px 40px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
 </style>
 
+</head>
+<body>
 <nav class="top" aria-label="Seitennavigation">
   <div class="wrap">
     <a class="mark" href="#start">D<span>/</span>S</a>
@@ -550,3 +558,6 @@ document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",async()
   catch(e){const r=document.createRange();r.selectNodeContents(v);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);b.textContent="Markiert"}
 }));
 </script>
+
+</body>
+</html>
