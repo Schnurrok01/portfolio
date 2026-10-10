@@ -1,0 +1,549 @@
+<title>David Schnur Portfolio 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Familjen+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: ein Streckenplan – die Laufbahn als Liniennetz mit drei parallelen Linien (Beruf, Studium, Engagement), darunter die Haltestellen im Detail */
+:root{
+  --paper:#f2f4f8; --card:#ffffff; --ink:#1b2140; --muted:#59617d; --rule:#d6dbe7;
+  --l-job:#3b3fa0; --l-edu:#0d8577; --l-eng:#c97a12; --go:#23955a; --k-data:#9a3a86; --k-tool:#4b6680;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Familjen Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0f1222; --card:#171b31; --ink:#e6e8f3; --muted:#9aa1bd; --rule:#2a3050;
+  --l-job:#8d92ff; --l-edu:#35c2b0; --l-eng:#f0a640; --go:#4fd38a; --k-data:#e48ad3; --k-tool:#9fb8d1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f1222; --card:#171b31; --ink:#e6e8f3; --muted:#9aa1bd; --rule:#2a3050;
+  --l-job:#8d92ff; --l-edu:#35c2b0; --l-eng:#f0a640; --go:#4fd38a; --k-data:#e48ad3; --k-tool:#9fb8d1; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;padding-inline:20px}
+.wrap{max-width:1080px;margin-inline:auto}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--l-job);outline-offset:3px;border-radius:4px}
+h1,h2,h3{text-wrap:balance;margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* Nav */
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);margin-inline:-20px;padding-inline:20px}
+nav.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px}
+.mark{font-family:var(--f-display);font-weight:800;font-size:22px;letter-spacing:.02em;text-decoration:none}
+.mark span{color:var(--l-job)}
+nav.top ul{list-style:none;display:flex;gap:4px;margin:0;padding:0;overflow-x:auto}
+nav.top a.nl{display:block;padding:6px 10px;border-radius:999px;text-decoration:none;font-size:14px;color:var(--muted);white-space:nowrap}
+nav.top a.nl.on{background:var(--ink);color:var(--paper)}
+@media (max-width:560px){.mark{display:none}nav.top .wrap{justify-content:center}}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding-block:64px 40px}
+.hero h1{font-family:var(--f-display);font-weight:800;font-size:clamp(56px,10vw,112px);line-height:.9;letter-spacing:.005em;text-transform:uppercase}
+.hero .role{font-size:clamp(19px,2.4vw,23px);margin-top:18px;max-width:34ch}
+.hero .role b{font-weight:600}
+.status{display:inline-flex;align-items:center;gap:10px;margin-top:22px;font-family:var(--f-mono);font-size:13px;border:1px solid var(--rule);background:var(--card);padding:6px 12px;border-radius:999px}
+.lamp{width:10px;height:10px;border-radius:50%;background:var(--go);box-shadow:0 0 0 0 color-mix(in srgb,var(--go) 60%,transparent);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.portrait{width:clamp(150px,22vw,230px);aspect-ratio:1;max-width:100%;border-radius:50%;overflow:hidden;border:6px solid var(--card);outline:2px solid var(--rule)}
+.portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:28px;font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.facts b{color:var(--ink);font-weight:500}
+@media (max-width:700px){.hero{grid-template-columns:1fr;padding-block:36px 24px}.portrait{order:-1}}
+
+section{padding-block:56px;border-top:1px solid var(--rule)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:28px}
+.sec-head h2{font-family:var(--f-display);font-weight:800;font-size:clamp(36px,5vw,52px);text-transform:uppercase;line-height:1}
+
+/* Über mich */
+.about{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:40px}
+.about p{margin:0 0 14px;max-width:62ch}
+.about p.lead{font-size:21px;line-height:1.45}
+.kv{display:grid;gap:0;border-top:1px solid var(--rule);align-self:start}
+.kv div{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule);font-size:15px}
+.kv dt{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.kv dd{margin:0}
+@media (max-width:760px){.about{grid-template-columns:1fr}}
+
+/* Streckenplan */
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer}
+.chip i{width:18px;height:4px;border-radius:2px;background:var(--c)}
+.chip[aria-pressed="false"]{opacity:.45}
+.chip[aria-pressed="false"] i{background:var(--rule)}
+.map-box{overflow-x:auto;background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:12px 8px}
+.map-box svg{display:block;min-width:780px;width:100%;height:auto}
+.map-hint{font-size:13px;color:var(--muted);margin-top:10px}
+svg .seg{cursor:pointer;transition:opacity .2s}
+svg .seg:hover .bar,svg .seg.sel .bar{stroke-width:14}
+svg .seg.off{opacity:.12;pointer-events:none}
+svg text{font-family:var(--f-mono);fill:var(--muted);font-size:11px}
+svg .lbl{fill:var(--ink);font-family:var(--f-body);font-size:13px;font-weight:600}
+
+.stops{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:0}
+.stop{display:grid;grid-template-columns:150px 28px minmax(0,1fr);gap:16px;scroll-margin-top:80px}
+.stop[hidden]{display:none!important}
+.when{font-family:var(--f-mono);font-size:13px;color:var(--muted);padding-top:22px;text-align:right;font-variant-numeric:tabular-nums}
+.rail{position:relative}
+.rail::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:var(--c);opacity:.35}
+.rail::after{content:"";position:absolute;left:50%;top:24px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--card);border:4px solid var(--c)}
+.stop.now .rail::after{background:var(--go);border-color:var(--go)}
+.body{padding:16px 20px 18px;margin-block:6px;border-radius:12px;border:1px solid transparent;transition:background .25s,border-color .25s}
+.stop.sel .body{background:var(--card);border-color:var(--c)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c);margin-bottom:4px}
+.body h3{font-size:21px;font-weight:600;line-height:1.3}
+.body .org{color:var(--muted);font-size:15px;margin-top:2px}
+.body ul{margin:10px 0 0;padding-left:18px}
+.body li{margin:3px 0;max-width:66ch}
+.body li::marker{color:var(--c)}
+.body a{color:var(--c);text-underline-offset:3px}
+.body .org a.ext{color:var(--muted);text-decoration-color:var(--c);text-decoration-thickness:1.5px}
+.body .org a.ext:hover{color:var(--c)}
+.body .org a.ext span{color:var(--c)}
+@media (max-width:640px){
+  .stop{grid-template-columns:22px minmax(0,1fr);gap:10px}
+  .when{grid-column:2;grid-row:1;text-align:left;padding-top:14px}
+  .rail{grid-column:1;grid-row:1/3}
+  .rail::after{top:16px}
+  .body{grid-column:2;padding:4px 12px 16px;margin-top:0}
+}
+
+/* Skills */
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:22px}
+.panel h3{font-size:18px;font-weight:600;margin-bottom:6px}
+.panel p{margin:0 0 14px;color:var(--muted);font-size:15px}
+.skills-hint{margin:-12px 0 24px;color:var(--muted);font-size:15px}
+.skills{align-items:start}
+.panel{display:flex;flex-direction:column;--c:var(--l-job)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.sk{font-family:var(--f-mono);font-size:13px;padding:5px 10px;border-radius:6px;background:var(--paper);border:1px solid var(--rule);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .15s,border-color .15s,transform .15s}
+.sk .lv{display:inline-flex;gap:2px}
+.sk .lv i{width:4px;height:4px;border-radius:50%;background:var(--rule)}
+.sk .lv i.f{background:var(--c)}
+.sk:hover{border-color:var(--c);transform:translateY(-1px)}
+.sk.on{background:var(--c);border-color:var(--c);color:var(--card)}
+.sk.on .lv i{background:color-mix(in srgb,var(--card) 40%,transparent)}
+.sk.on .lv i.f{background:var(--card)}
+.detail{margin-top:16px;padding-top:16px;border-top:1px dashed var(--rule);min-height:220px}
+.detail h4{margin:0;font-size:19px;font-weight:600;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.detail h4 small{font-family:var(--f-mono);font-size:11px;font-weight:400;color:var(--c);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.detail .what{color:var(--muted);font-size:14px;margin:4px 0 12px}
+.detail .did{font-size:15px;margin:0 0 12px}
+.detail .did b{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:400;margin-bottom:2px}
+.at{display:flex;flex-wrap:wrap;gap:6px}
+.at button{font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;border:1.5px solid var(--sc);background:transparent;color:var(--ink);cursor:pointer}
+.at button:hover{background:color-mix(in srgb,var(--sc) 15%,transparent)}
+.at button::after{content:" ↓";color:var(--sc)}
+.detail.swap{animation:sw .25s ease}
+@keyframes sw{from{opacity:.3;transform:translateY(4px)}}
+.lang{display:grid;gap:8px;margin-top:4px}
+.lang .sk{display:flex;justify-content:space-between;width:100%;font-size:14px;padding:8px 12px}
+.dots{display:flex;gap:5px}
+.lang .sk.on .dots i{border-color:var(--card)}
+.lang .sk.on .dots i.f{background:var(--card)}
+.dots i{width:12px;height:12px;border-radius:50%;border:2px solid var(--l-job)}
+.dots i.f{background:var(--l-job)}
+.lang small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+@media (max-width:860px){.skills{grid-template-columns:1fr}}
+
+/* Periodensystem der Skills */
+.pt{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:6px}
+.el{--c:var(--l-job);position:relative;aspect-ratio:1/1.12;min-width:0;border-radius:6px;padding:6px 7px 7px;display:flex;flex-direction:column;text-align:left;font:inherit;color:var(--ink);cursor:pointer;
+  background:color-mix(in srgb,var(--c) 13%,var(--card));border:1.5px solid color-mix(in srgb,var(--c) 55%,transparent);transition:transform .18s ease,box-shadow .18s ease,opacity .2s}
+.el .z{font-family:var(--f-mono);font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.el .m{position:absolute;top:6px;right:7px;font-family:var(--f-mono);font-size:10px;color:var(--c)}
+.el .sym{font-family:var(--f-display);font-weight:800;font-size:clamp(22px,3.2vw,36px);line-height:1;color:var(--c);margin-top:auto}
+.el .nm{font-size:11px;line-height:1.2;margin-top:3px;hyphens:auto;overflow-wrap:break-word;min-height:2.4em}
+.el:hover,.el:focus-visible{transform:translateY(-3px) scale(1.05);box-shadow:0 8px 18px -8px color-mix(in srgb,var(--c) 70%,transparent);z-index:2}
+.el.on{background:var(--c);border-color:var(--c)}
+.el.on .z,.el.on .m,.el.on .sym,.el.on .nm{color:var(--card)}
+.pt.dim .el:not(.hl){opacity:.22}
+.pt-preview{grid-column:2/9;grid-row:1;display:flex;flex-direction:column;justify-content:center;padding:0 12px;min-width:0}
+.pt-preview .big{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,3.6vw,40px);line-height:1;text-transform:uppercase}
+.pt-preview .sub{font-size:14px;color:var(--muted);margin-top:6px;max-width:60ch}
+.pt-preview .sub b{color:var(--pc);font-weight:600}
+.pt-key{grid-column:4/10;grid-row:4;display:flex;flex-wrap:wrap;align-content:center;gap:6px 8px;padding:6px 0 0 8px}
+.pt-key .k{font:inherit;font-size:13px;display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer}
+.pt-key .k i{width:12px;height:12px;border-radius:3px;background:color-mix(in srgb,var(--c) 25%,var(--card));border:1.5px solid var(--c)}
+.pt-key .note{flex-basis:100%;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.pt-lang{margin-top:18px}
+.pt-lang-label{grid-column:1/4;align-self:center;text-align:right;padding-right:12px;font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:720px){
+  .pt{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .pt .el{grid-column:auto!important;grid-row:auto!important}
+  .pt-preview{grid-column:1/-1;grid-row:auto;order:-2;padding:0 0 8px;min-height:84px}
+  .pt-key{grid-column:1/-1;grid-row:auto;order:-1;padding:0 0 10px}
+  .pt-lang-label{grid-column:1/-1;text-align:left;padding:0}
+  .el .nm{font-size:10.5px}
+}
+
+/* Karte */
+.ov[hidden]{display:none!important}
+.ov{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--ink) 45%,transparent);backdrop-filter:blur(3px);animation:fade .2s ease}
+@keyframes fade{from{opacity:0}}
+.card3d{position:relative;width:min(400px,100%);height:min(520px,calc(100dvh - 48px));perspective:1400px;animation:pop .28s ease}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+.flip{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.3,.7,.3,1)}
+.flip.turned{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;--c:var(--l-job)}
+.front{border:2px solid var(--c);background:color-mix(in srgb,var(--c) 14%,var(--card));color:var(--ink);font:inherit;text-align:left;cursor:pointer;padding:24px 26px;display:flex;flex-direction:column;box-shadow:0 30px 60px -20px rgba(0,0,0,.45)}
+.front .z{font-family:var(--f-mono);font-size:22px}
+.front .m{position:absolute;top:24px;right:26px;font-family:var(--f-mono);font-size:14px;color:var(--c);text-align:right}
+.front .sym{font-family:var(--f-display);font-weight:800;font-size:150px;line-height:.9;color:var(--c);margin-top:auto}
+.front .nm{font-size:26px;font-weight:600;margin-top:8px}
+.front .cat{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--c);margin-top:6px}
+.front .turn{font-size:13px;color:var(--muted);margin-top:18px}
+.back{transform:rotateY(180deg);background:var(--card);border:2px solid var(--c);padding:22px 24px;display:flex;flex-direction:column;overflow:auto;box-shadow:0 30px 60px -20px rgba(0,0,0,.45)}
+.back .head{display:flex;align-items:center;gap:14px}
+.back .mini{flex:none;width:58px;height:62px;border-radius:6px;border:1.5px solid var(--c);background:color-mix(in srgb,var(--c) 14%,var(--card));display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:28px;color:var(--c)}
+.back h3{font-size:22px;font-weight:600;line-height:1.2}
+.back .cat{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.back .lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:18px 0 4px}
+.back p{margin:0;font-size:15px}
+.back .at{display:flex;flex-wrap:wrap;gap:6px}
+.back .at button{font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;border:1.5px solid var(--sc);background:transparent;color:var(--ink);cursor:pointer}
+.back .at button:hover{background:color-mix(in srgb,var(--sc) 15%,transparent)}
+.back .at button::after{content:" ↓";color:var(--sc)}
+.back .none{font-size:14px;color:var(--muted)}
+.back .dots{margin-top:4px}
+.back .dots i{border-color:var(--c)}
+.back .dots i.f{background:var(--c)}
+.back .act{display:flex;gap:8px;margin-top:auto;padding-top:20px}
+.back .act button{font:inherit;font-size:14px;padding:8px 14px;border-radius:8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);cursor:pointer}
+.back .act button.pri{background:var(--ink);color:var(--paper);border-color:var(--ink);margin-left:auto}
+@media (prefers-reduced-motion:reduce){.flip{transition:none}}
+
+/* Kontakt */
+.contact{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+.contact h2{font-family:var(--f-display);font-weight:800;font-size:clamp(40px,7vw,80px);line-height:.95;text-transform:uppercase}
+.cbox{display:grid;gap:10px}
+.crow{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 10px 10px 14px}
+.crow .v{font-family:var(--f-mono);font-size:14px;user-select:all;overflow-wrap:anywhere;flex:1;min-width:0}
+.crow .k{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);width:68px;flex:none}
+.copy{font:inherit;font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);cursor:pointer;white-space:nowrap}
+.copy.done{background:var(--go);border-color:var(--go);color:#fff}
+@media (max-width:760px){.contact{grid-template-columns:1fr}}
+.li-link{display:inline-flex!important;align-items:center;gap:6px;color:var(--ink)!important;border:1px solid var(--rule)}
+.li-link:hover{background:var(--ink);color:var(--paper)!important;border-color:var(--ink)}
+.ico{flex:none;display:block}
+.crow a.vl{color:var(--ink);text-underline-offset:3px;user-select:text}
+.li-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:var(--ink)!important;color:var(--paper)!important;border-color:var(--ink)!important}
+@media (max-width:420px){.li-link span{display:none}}
+footer{padding-block:28px 40px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+</style>
+
+<nav class="top" aria-label="Seitennavigation">
+  <div class="wrap">
+    <a class="mark" href="#start">D<span>/</span>S</a>
+    <ul>
+      <li><a class="nl" href="#ueber">Über mich</a></li>
+      <li><a class="nl" href="#strecke">Werdegang</a></li>
+      <li><a class="nl" href="#skills">Skills</a></li>
+      <li><a class="nl" href="#kontakt">Kontakt</a></li>
+      <li><a class="nl li-link" href="https://www.linkedin.com/in/david-schnur-89b387272" target="_blank" rel="noopener" aria-label="LinkedIn-Profil öffnen"><svg class="ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="10" r="3"/><path d="M6.8 18.2c1-2.4 3-3.6 5.2-3.6s4.2 1.2 5.2 3.6"/></svg><span>LinkedIn</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap" id="start">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Portfolio · Remagen</div>
+      <h1>David<br>Schnur</h1>
+      <p class="role"><b>Technischer Projektmanager</b> mit Wurzeln in Physik, Biomechanik und Softwareentwicklung.</p>
+      <div class="status"><span class="lamp" aria-hidden="true"></span>Seit Okt 2025 bei voestalpine Signaling Siershahn</div>
+      <div class="facts">
+        <span><b>&gt;20</b> Projekte parallel koordiniert</span>
+        <span><b>M.Sc.</b> Applied Physics</span>
+        <span><b>3</b> Sprachen</span>
+      </div>
+    </div>
+    <div class="portrait"><img src="data:image/jpeg;base64,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" alt="Porträt von David Schnur"></div>
+  </header>
+
+  <section id="ueber">
+    <div class="sec-head"><h2>Über mich</h2><span class="eyebrow">Persönliches</span></div>
+    <div class="about">
+      <div>
+        <p class="lead">Ich bin David, Technischer Projektmanager aus Remagen. Mir macht es Spaß, zwischen Technik und Kunden zu vermitteln und dafür zu sorgen, dass Projekte sauber laufen.</p>
+        <p>Studiert habe ich zuerst Sportmedizinische Technik an der Hochschule Koblenz in Remagen. Dort ging es viel um Bewegungsanalyse, Sensoren und Programmierung. Danach habe ich den Master in Applied Physics gemacht, mit Fokus auf Data Science, Medizintechnik und KI.</p>
+        <p>Während des Studiums habe ich im Biomechaniklabor gearbeitet, zuletzt als stellvertretender Laborleiter, und dort Software für die Auswertung von Messdaten entwickelt. Nebenbei war ich beim Start-up CapaCon und habe eine Software gebaut, die Personen in Sporthallen erkennt und zählt, samt Server und Datenbank.</p>
+        <p>Ich engagiere mich auch gern über den Job hinaus. An der Hochschule habe ich erst die BaRACke geleitet, unseren Studierendentreffpunkt, und war danach Vorsitzender des AStA. Seit Oktober 2025 bin ich bei voestalpine Signaling und koordiniere dort internationale Projekte, speziell in der Softwareentwicklung.</p>
+      </div>
+      <dl class="kv">
+        <div><dt>Wohnort</dt><dd>Remagen, Deutschland</dd></div>
+        <div><dt>Aktuell</dt><dd>Technischer Projektmanager, voestalpine Signaling Siershahn</dd></div>
+        <div><dt>Studium</dt><dd>M.Sc. Applied Physics · B.Sc. Sportmedizinische Technik</dd></div>
+        <div><dt>Stärken</dt><dd>Multiprojektmanagement, Scrum, Datenanalyse, Python &amp; C#</dd></div>
+        <div><dt>Sprachen</dt><dd>Deutsch, Englisch, Französisch</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="strecke">
+    <div class="sec-head">
+      <h2>Werdegang</h2>
+      <div class="legend" role="group" aria-label="Linien ein- und ausblenden">
+        <button class="chip" id="f-job" data-line="job" aria-pressed="true" style="--c:var(--l-job)"><i></i>Beruf</button>
+        <button class="chip" id="f-edu" data-line="edu" aria-pressed="true" style="--c:var(--l-edu)"><i></i>Studium</button>
+        <button class="chip" id="f-eng" data-line="eng" aria-pressed="true" style="--c:var(--l-eng)"><i></i>Engagement</button>
+      </div>
+    </div>
+    <div class="map-box"><svg id="map" viewBox="0 0 1040 300" role="img" aria-label="Streckenplan der Laufbahn von 2019 bis heute"></svg></div>
+    <p class="map-hint">Tippe auf eine Linie, um zur Station zu springen. Mit den Schaltern oben blendest du Linien aus.</p>
+    <ol class="stops" id="stops"></ol>
+  </section>
+
+  <section id="skills">
+    <div class="sec-head"><h2>Skills</h2><span class="eyebrow">Werkzeugkasten</span></div>
+    <p class="skills-hint">Alle Skills auf einen Blick, geordnet wie im Periodensystem. Ein Klick auf ein Element öffnet die Karte mit Details und den Stationen, an denen ich den Skill eingesetzt habe.</p>
+    <div class="pt" id="pt" lang="de">
+      <div class="pt-preview" id="pt-preview" aria-live="polite"></div>
+      <div class="pt-key" id="pt-key"></div>
+    </div>
+    <div class="pt pt-lang" id="pt-lang" lang="de"><div class="pt-lang-label">Sprachen</div></div>
+    <div class="ov" id="ov" hidden>
+      <div class="scrim" id="ov-scrim"></div>
+      <div class="card3d" role="dialog" aria-modal="true" aria-labelledby="card-name">
+        <div class="flip" id="flip">
+          <button class="face front" id="card-front" aria-label="Karte umdrehen"></button>
+          <div class="face back" id="card-back"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="contact">
+      <div>
+        <div class="eyebrow">Kontakt</div>
+        <h2>Noch Fragen?<br>Melden Sie sich.</h2>
+      </div>
+      <div class="cbox">
+        <div class="crow"><span class="k">E-Mail</span><span class="v" id="mail">schnur.dav@gmail.com</span><button class="copy" id="copy-mail" data-t="mail">Kopieren</button></div>
+        <div class="crow"><span class="k">Telefon</span><span class="v" id="tel">+49 151 55696839</span><button class="copy" id="copy-tel" data-t="tel">Kopieren</button></div>
+        <div class="crow"><span class="k">Ort</span><span class="v">Remagen, Deutschland</span></div>
+        <div class="crow"><span class="k">LinkedIn</span><a class="v vl" href="https://www.linkedin.com/in/david-schnur-89b387272" target="_blank" rel="noopener">linkedin.com/in/david-schnur-89b387272</a><a class="copy li-btn" href="https://www.linkedin.com/in/david-schnur-89b387272" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="10" r="3"/><path d="M6.8 18.2c1-2.4 3-3.6 5.2-3.6s4.2 1.2 5.2 3.6"/></svg>Profil öffnen</a></div>
+      </div>
+    </div>
+  </section>
+  <footer>© 2026 David Schnur</footer>
+</main>
+
+<script>
+const LINES={job:{name:"Beruf",c:"--l-job"},edu:{name:"Studium",c:"--l-edu"},eng:{name:"Engagement",c:"--l-eng"}};
+const NOW=2026+9/12;
+const STOPS=[
+ {id:"voest",line:"job",row:0,from:2025+9/12,to:NOW,when:"Okt 2025 – heute",now:true,
+  title:"Technischer Projektmanager",org:"voestalpine Signaling, Siershahn",url:"https://www.voestalpine.com/railway-systems/de/produkte/digital-systems/diagnose-und-monitoring-rollendes-material/",
+  pts:["Koordination internationaler Softwareentwicklungsprojekte mit Jira im Multiprojektmanagement (über 20 Projekte)","Technische Übersetzung von Kundenanforderungen in umsetzbare Entwicklungsaufgaben","Machbarkeitsanalysen und Aufwandsschätzungen für internationale Kunden","Steuerung der Softwareentwicklung nach Scrum","Qualitätssicherung und Prozesskontrolle im Multiprojektmanagement"]},
+ {id:"msc",line:"edu",row:0,from:2023+9/12,to:2025+8/12,when:"2023 – 2025",
+  title:"Master of Science, Applied Physics",org:"Universität Koblenz / HS Koblenz",url:"https://www.hs-koblenz.de/mut/applied-physics",
+  pts:["Schwerpunkt Data Science und Medizintechnik","Abschlussarbeit mit Schwerpunkt KI-Entwicklung und Projektmanagement"]},
+ {id:"lab",line:"job",row:0,from:2022+5/12,to:2025+8/12,when:"Jun 2022 – Aug 2025",
+  title:"Wissenschaftlicher Mitarbeiter",org:"Biomechaniklabor, Hochschule Koblenz, Remagen",
+  pts:["Stellvertretende Laborleitung","Durchführung und Entwicklung von Auswertesoftware für Datenanalyse und Machine Learning"]},
+ {id:"asta",line:"eng",row:0,from:2022,to:2024,when:"2022 – 2024",
+  title:"AStA-Vorsitz",org:"Hochschule Koblenz",url:"https://www.hs-koblenz.de/studierende/studentische-gremien",
+  pts:["Leitung des AStA mit 6 Referaten","Repräsentation in der Öffentlichkeit","Mitarbeit in verschiedenen internen Arbeitsgruppen der Hochschule"]},
+ {id:"capa",line:"job",row:1,from:2022+2/12,to:2023+5/12,when:"Mär 2022 – Mai 2023",
+  title:"Softwareentwickler",org:"Start-up CapaCon",
+  pts:["Aufbau einer Analysesoftware zur Zählung und Erkennung von Personen im Hallensport","Aufbau der zugehörigen Server- und Datenbankstruktur"],
+  link:{href:"https://www.capa-con.de",text:"Eindruck meiner Arbeit: capa-con.de"}},
+ {id:"barack",line:"eng",row:0,from:2020,to:2022,when:"2020 – 2022",
+  title:"Leiter des Studierendentreffpunkts BaRACke",org:"AStA, Hochschule Koblenz",
+  pts:["Gebäudeinstandhaltung des Studierendentreffpunkts","Organisation der Bar","Treffen mit der Stadt Remagen und der Hochschule"]},
+ {id:"bsc",line:"edu",row:0,from:2019+9/12,to:2023+8/12,when:"2019 – 2023",
+  title:"Bachelor of Science, Sportmedizinische Technik",org:"Hochschule Koblenz",url:"https://www.hs-koblenz.de/mut/sportmedizinische-technik",
+  pts:["Schwerpunkt Bewegungsanalyse und Programmierung","Abschlussarbeit zu Sensorentwicklung und Datenbank-Migration"]}
+];
+
+// ---- Karte
+const svg=document.getElementById("map"),NS="http://www.w3.org/2000/svg";
+const X0=2019.5,X1=2027,L=40,R=1020,x=t=>L+(t-X0)/(X1-X0)*(R-L);
+const Y={job:[70,108],edu:[175],eng:[245]};
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
+for(let yr=2020;yr<=2026;yr++){
+  el("line",{x1:x(yr),x2:x(yr),y1:28,y2:278,stroke:"var(--rule)","stroke-dasharray":"2 4"});
+  el("text",{x:x(yr),y:20,"text-anchor":"middle"}).textContent=yr;
+}
+[["job",L,72],["edu",L,158],["eng",L,228]].forEach(([k,xx,yy])=>{
+  const t=el("text",{x:xx-28,y:yy-24});t.textContent=LINES[k].name.toUpperCase();t.setAttribute("style","letter-spacing:.1em");
+});
+// heute
+el("line",{x1:x(NOW),x2:x(NOW),y1:28,y2:278,stroke:"var(--go)","stroke-width":1.5});
+const ht=el("text",{x:x(NOW)-6,y:290,"text-anchor":"end"});ht.textContent="heute";ht.setAttribute("style","fill:var(--go)");
+const segs={};
+STOPS.slice().reverse().forEach(s=>{
+  const y=Y[s.line][s.row],col=`var(${LINES[s.line].c})`,g=el("g",{class:"seg",tabindex:0,role:"button","aria-label":`${s.title}, ${s.when}`});
+  g.dataset.id=s.id;g.dataset.line=s.line;
+  el("line",{class:"bar",x1:x(s.from),x2:x(s.to),y1:y,y2:y,stroke:col,"stroke-width":10,"stroke-linecap":"round"},g);
+  [s.from,s.to].forEach((t,i)=>{
+    const live=s.now&&i===1;
+    el("circle",{cx:x(t),cy:y,r:7,fill:live?"var(--go)":"var(--card)",stroke:live?"var(--go)":col,"stroke-width":3},g);
+  });
+  const short={voest:"voestalpine",msc:"M.Sc. Physik",lab:"Biomechaniklabor",asta:"AStA-Vorsitz",capa:"CapaCon",barack:"BaRACke",bsc:"B.Sc. Sportmed. Technik"}[s.id];
+  const t=el("text",{class:"lbl",x:x(s.from),y:y-14},g);t.textContent=short;
+  if(s.id==="voest"){t.setAttribute("x",x(s.to));t.setAttribute("text-anchor","end")}
+  el("rect",{x:x(s.from)-8,y:y-30,width:x(s.to)-x(s.from)+16,height:42,fill:"transparent"},g);
+  const go=()=>select(s.id,true);
+  g.addEventListener("click",go);
+  g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});
+  segs[s.id]=g;
+});
+
+// ---- Haltestellen
+const list=document.getElementById("stops");
+const sorted=STOPS.slice().sort((a,b)=>b.from-a.from);
+sorted.forEach(s=>{
+  const li=document.createElement("li");
+  li.className="stop"+(s.now?" now":"");li.id="stop-"+s.id;li.dataset.line=s.line;
+  li.style.setProperty("--c",`var(${LINES[s.line].c})`);
+  li.innerHTML=`<div class="when">${s.when}</div><div class="rail" aria-hidden="true"></div>
+  <div class="body"><span class="tag">${LINES[s.line].name}${s.now?" · aktuell":""}</span><h3>${s.title}</h3><div class="org">${s.url?`<a class="ext" href="${s.url}" target="_blank" rel="noopener">${s.org}<span aria-hidden="true"> ↗</span></a>`:s.org}</div>
+  <ul>${s.pts.map(p=>`<li>${p}</li>`).join("")}${s.link?`<li><a href="${s.link.href}" target="_blank" rel="noopener">${s.link.text}</a></li>`:""}</ul></div>`;
+  li.addEventListener("click",()=>select(s.id,false));
+  list.appendChild(li);
+});
+
+function select(id,scroll){
+  document.querySelectorAll(".stop.sel,.seg.sel").forEach(e=>e.classList.remove("sel"));
+  segs[id].classList.add("sel");const li=document.getElementById("stop-"+id);li.classList.add("sel");
+  if(scroll)li.scrollIntoView({block:"center"});
+}
+select("voest",false);
+
+// ---- Filter
+let state={job:true,edu:true,eng:true};
+try{const s=JSON.parse(localStorage.getItem("ds-lines"));if(s)state=Object.assign(state,s)}catch(e){}
+function apply(){
+  document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",state[b.dataset.line]));
+  Object.values(segs).forEach(g=>g.classList.toggle("off",!state[g.dataset.line]));
+  document.querySelectorAll(".stop").forEach(li=>li.hidden=!state[li.dataset.line]);
+  try{localStorage.setItem("ds-lines",JSON.stringify(state))}catch(e){}
+}
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+  const k=b.dataset.line;state[k]=!state[k];
+  if(!Object.values(state).some(Boolean))state[k]=true;apply();
+}));
+apply();
+
+// ---- Periodensystem der Skills
+const SHORT={voest:"voestalpine",msc:"M.Sc. Physik",lab:"Biomechaniklabor",asta:"AStA",capa:"CapaCon",barack:"BaRACke",bsc:"B.Sc. Sportmed. Technik"};
+const CAT={
+  prog:{n:"Programmierung",c:"--l-edu"},
+  data:{n:"Daten & Forschung",c:"--k-data"},
+  meth:{n:"Methoden",c:"--l-job"},
+  tool:{n:"Werkzeuge",c:"--k-tool"},
+  lead:{n:"Führung & Kommunikation",c:"--l-eng"},
+  lang:{n:"Sprachen",c:"--go"}
+};
+const SH="­";
+const EL=[
+ {s:"Py",n:"Python",cat:"prog",x:1,y:1,what:"Programmiersprache für Datenanalyse, Automatisierung und Machine Learning.",did:"Entwicklung von Auswertesoftware für Datenanalyse und Machine Learning im Biomechaniklabor und im Master. Auch bei voestalpine setze ich Python ein.",at:["lab","msc","voest"]},
+ {s:"Lf",n:"Leitung",cat:"lead",x:9,y:1,what:"Teams führen, Verantwortung tragen, Termine und Gremien koordinieren.",did:"Leitung des AStA mit 6 Referaten, Leitung der BaRACke und stellvertretende Laborleitung.",at:["asta","barack","lab"]},
+ {s:"Cs",n:"C#",cat:"prog",x:1,y:2,what:"Objektorientierte Sprache für Anwendungen im .NET-Umfeld.",did:"Damit habe ich objektorientiertes Programmieren gelernt und angewendet: Klassen, Vererbung und sauber strukturierter Code.",at:["bsc"]},
+ {s:"Mg",n:"MongoDB",cat:"prog",x:2,y:2,what:"Dokumentenorientierte NoSQL-Datenbank.",did:"Aufbau der Server- und Datenbankstruktur für die Personenzählung bei CapaCon und Datenbank-Migration in der Bachelorarbeit.",at:["capa","bsc"]},
+ {s:"Sc",n:"Scrum",cat:"meth",x:4,y:2,what:"Agiles Vorgehen in kurzen Sprints mit festen Rollen und Terminen.",did:"Ich steuere die Softwareentwicklung nach Scrum und übersetze Kundenwünsche in umsetzbare Entwicklungsaufgaben. Auch im Biomechaniklabor habe ich mit Scrum gearbeitet.",at:["voest","lab"]},
+ {s:"Kb",n:"Kanban",cat:"meth",x:5,y:2,what:"Visuelle Steuerung von Aufgaben über ein Board mit begrenzter paralleler Arbeit.",did:"Hilft mir, viele parallele Aufgaben und Projekte übersichtlich zu halten, bei voestalpine und im Biomechaniklabor.",at:["voest","lab"]},
+ {s:"Mp",n:"Multiprojektmanagement",t:`Multi${SH}projekt${SH}manage${SH}ment`,cat:"meth",x:6,y:2,what:"Viele Projekte gleichzeitig planen, priorisieren und überwachen.",did:"Über 20 Softwareentwicklungsprojekte parallel bei voestalpine, inklusive Qualitätssicherung und Prozesskontrolle. Mehrere Projekte gleichzeitig habe ich auch im Biomechaniklabor betreut.",at:["voest","lab"]},
+ {s:"Ma",n:"Machbarkeitsanalysen",t:`Machbar${SH}keits${SH}analysen`,cat:"meth",x:7,y:2,what:"Prüfen, ob und mit welchem Aufwand sich eine Anforderung umsetzen lässt.",did:"Ich erstelle Machbarkeitsanalysen und Aufwandsschätzungen für internationale Kunden.",at:["voest"]},
+ {s:"Dt",n:"Design Thinking",cat:"meth",x:8,y:2,what:"Nutzerzentrierte Methode, um Probleme zu verstehen und Lösungen zu entwickeln.",did:"Teil meiner Arbeitsweise, wenn aus Kundenanforderungen konkrete Lösungen werden.",at:["voest","msc"]},
+ {s:"Ka",n:"Kundenanforderungen",t:`Kunden${SH}anforde${SH}rungen`,cat:"lead",x:9,y:2,what:"Wünsche von Kunden verstehen und für Entwicklerteams greifbar machen.",did:"Technische Übersetzung von Kundenanforderungen in umsetzbare Entwicklungsaufgaben für internationale Kunden.",at:["voest"]},
+ {s:"Ml",n:"Machine Learning",cat:"data",x:1,y:3,what:"Modelle, die aus Daten Muster lernen und Vorhersagen treffen.",did:"Auswertesoftware mit ML im Biomechaniklabor und KI-Entwicklung als Schwerpunkt der Masterarbeit.",at:["lab","msc"]},
+ {s:"Da",n:"Datenanalyse",t:`Daten${SH}analyse`,cat:"data",x:2,y:3,what:"Messdaten aufbereiten, auswerten und verständlich darstellen.",did:"Bewegungsanalyse im Bachelor, Auswertung von Labordaten und Data Science im Master.",at:["lab","msc","bsc"]},
+ {s:"Jr",n:"Jira",cat:"tool",x:4,y:3,what:"Werkzeug für Ticket- und Projektverwaltung in Entwicklungsteams.",did:"Damit koordiniere ich über 20 internationale Softwareentwicklungsprojekte parallel: Anforderungen als Tickets, Fortschritt und Abhängigkeiten im Blick. Auch im Biomechaniklabor habe ich Aufgaben in Jira organisiert.",at:["voest","lab"]},
+ {s:"Vs",n:"VS Code",cat:"tool",x:5,y:3,what:"Code-Editor für die tägliche Entwicklung.",did:"Meine Standardumgebung für Python- und Softwareprojekte.",at:["lab","capa"]},
+ {s:"Mx",n:"MobaXterm",t:`Moba${SH}Xterm`,cat:"tool",x:6,y:3,what:"Terminal mit SSH für die Arbeit auf entfernten Servern.",did:"Zugriff auf Server, etwa beim Betrieb der CapaCon-Serverstruktur.",at:["capa"]},
+ {s:"Tx",n:"LaTeX",cat:"tool",x:7,y:3,what:"Satzsystem für wissenschaftliche Dokumente.",did:"Für Abschlussarbeiten und wissenschaftliche Ausarbeitungen.",at:["bsc","msc"]},
+ {s:"Of",n:"MS Office",cat:"tool",x:8,y:3,what:"Word, Excel, PowerPoint und Outlook im Arbeitsalltag.",did:"Für Auswertungen, Präsentationen und Projektdokumentation im Studium und Beruf.",at:["voest","asta"]},
+ {s:"Rp",n:"Repräsentation",t:`Reprä${SH}sentation`,cat:"lead",x:9,y:3,what:"Eine Organisation nach außen vertreten und mit Partnern verhandeln.",did:"Repräsentation des AStA in der Öffentlichkeit und Treffen mit der Stadt Remagen und der Hochschule für die BaRACke.",at:["asta","barack"]},
+ {s:"Se",n:"Sensorentwicklung",t:`Sensor${SH}ent${SH}wick${SH}lung`,cat:"data",x:1,y:4,what:"Messsysteme entwerfen, die physikalische Größen erfassen.",did:"Schwerpunkt meiner Bachelorarbeit, zusammen mit einer Datenbank-Migration.",at:["bsc"]},
+ {s:"Bw",n:"Bewegungsanalyse",t:`Bewe${SH}gungs${SH}analyse`,cat:"data",x:2,y:4,what:"Bewegungen des Körpers messen und biomechanisch auswerten.",did:"Schwerpunkt im Bachelor Sportmedizinische Technik.",at:["bsc"]},
+ {s:"Mt",n:"Medizintechnik",t:`Medizin${SH}technik`,cat:"data",x:3,y:4,what:"Technik für Diagnose, Therapie und Gesundheit.",did:"Schwerpunkt im Master Applied Physics, zusammen mit Data Science.",at:["msc"]},
+ {s:"De",n:"Deutsch",cat:"lang",lv:5,x:4,y:1,what:"Sehr gute Kenntnisse (5 von 5).",did:"Arbeitssprache in Studium, Labor, Gremienarbeit und Beruf.",at:["voest","asta"]},
+ {s:"En",n:"Englisch",cat:"lang",lv:5,x:5,y:1,what:"Sehr gute Kenntnisse (5 von 5).",did:"Täglich im Einsatz bei der Koordination internationaler Projekte und Kunden.",at:["voest"]},
+ {s:"Fr",n:"Französisch",t:`Franzö${SH}sisch`,cat:"lang",lv:3,x:6,y:1,what:"Gute Kenntnisse (3 von 5).",did:"Solide Grundlage für Gespräche und Texte.",at:[]}
+];
+EL.forEach((e,i)=>e.z=i+1);
+
+const ptEl=document.getElementById("pt"),ptLang=document.getElementById("pt-lang"),prev=document.getElementById("pt-preview");
+const dots=n=>`<span class="dots" aria-hidden="true">${[1,2,3,4,5].map(i=>`<i class="${i<=n?"f":""}"></i>`).join("")}</span>`;
+function tile(e){
+  const b=document.createElement("button");
+  b.className="el";b.id="el-"+e.s;b.style.setProperty("--c",`var(${CAT[e.cat].c})`);
+  b.style.gridColumn=e.x;b.style.gridRow=e.y;b.style.order=Object.keys(CAT).indexOf(e.cat)*100+e.z;b.dataset.cat=e.cat;
+  b.setAttribute("aria-label",`${e.n}, ${CAT[e.cat].n}. Karte öffnen`);
+  b.innerHTML=`<span class="z">${e.z}</span><span class="m">${e.at.length?e.at.length:"–"}</span><span class="sym">${e.s}</span><span class="nm">${e.t||e.n}</span>`;
+  b.addEventListener("pointerenter",()=>preview(e));
+  b.addEventListener("focus",()=>preview(e));
+  b.addEventListener("click",()=>openCard(e,b));
+  (e.cat==="lang"?ptLang:ptEl).appendChild(b);
+}
+EL.forEach(tile);
+
+function preview(e){
+  prev.style.setProperty("--pc",`var(${CAT[e.cat].c})`);
+  const n=e.at.length;
+  prev.innerHTML=`<div class="big">${e.z} · ${e.n}</div><div class="sub"><b>${CAT[e.cat].n}</b> · ${n?`eingesetzt an ${n} ${n>1?"Stationen":"Station"}`:"Sprachkenntnis"}. Klicken, um die Karte umzudrehen.</div>`;
+}
+prev.innerHTML=`<div class="big">${EL.length} Elemente</div><div class="sub">Jedes Element ist ein Skill. Die Farbe zeigt die Gruppe, die Zahl oben rechts, an wie vielen Stationen meines Werdegangs ich ihn eingesetzt habe.</div>`;
+
+// Legende
+const key=document.getElementById("pt-key");
+Object.entries(CAT).forEach(([k,c])=>{
+  const b=document.createElement("button");b.className="k";b.id="key-"+k;b.style.setProperty("--c",`var(${c.c})`);
+  b.innerHTML=`<i></i>${c.n}`;
+  const on=()=>{[ptEl,ptLang].forEach(p=>{p.classList.add("dim");p.querySelectorAll(".el").forEach(t=>t.classList.toggle("hl",t.dataset.cat===k))})};
+  const off=()=>[ptEl,ptLang].forEach(p=>p.classList.remove("dim"));
+  b.addEventListener("pointerenter",on);b.addEventListener("pointerleave",off);
+  b.addEventListener("focus",on);b.addEventListener("blur",off);
+  key.appendChild(b);
+});
+key.insertAdjacentHTML("beforeend",`<span class="note">Oben links: Ordnungszahl · oben rechts: Anzahl Stationen</span>`);
+
+// Karte
+const ov=document.getElementById("ov"),flip=document.getElementById("flip"),front=document.getElementById("card-front"),back=document.getElementById("card-back");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lastTile=null,flipTimer;
+function openCard(e,b){
+  lastTile=b;document.querySelectorAll(".el.on").forEach(t=>t.classList.remove("on"));b.classList.add("on");
+  const col=`var(${CAT[e.cat].c})`;front.style.setProperty("--c",col);back.style.setProperty("--c",col);
+  const n=e.at.length;
+  front.innerHTML=`<span class="z">${e.z}</span><span class="m">${n?n+(n>1?" Stationen":" Station"):""}</span><span class="sym">${e.s}</span><span class="nm">${e.n}</span><span class="cat">${CAT[e.cat].n}</span><span class="turn">Zum Umdrehen klicken</span>`;
+  back.innerHTML=`<div class="head"><div class="mini">${e.s}</div><div><div class="cat">${e.z} · ${CAT[e.cat].n}</div><h3 id="card-name">${e.n}</h3></div></div>
+    <div class="lbl">Was das ist</div><p>${e.what}</p>${e.lv?dots(e.lv):""}
+    <div class="lbl">Was ich damit gemacht habe</div><p>${e.did}</p>
+    <div class="lbl">Eingesetzt bei</div>
+    ${n?`<div class="at">${e.at.map(id=>{const st=STOPS.find(x=>x.id===id);return `<button data-go="${id}" style="--sc:var(${LINES[st.line].c})">${SHORT[id]}</button>`}).join("")}</div>`:`<div class="none">Keine einzelne Station, sondern eine allgemeine Kenntnis.</div>`}
+    <div class="act"><button id="card-turn">Vorderseite</button><button class="pri" id="card-close">Schließen</button></div>`;
+  back.querySelector("#card-turn").addEventListener("click",()=>{flip.classList.remove("turned");front.focus()});
+  back.querySelector("#card-close").addEventListener("click",closeCard);
+  back.querySelectorAll("[data-go]").forEach(btn=>btn.addEventListener("click",()=>{
+    const id=btn.dataset.go,line=STOPS.find(x=>x.id===id).line;closeCard();
+    if(!state[line]){state[line]=true;apply()}select(id,true);
+  }));
+  flip.classList.remove("turned");ov.hidden=false;front.focus();
+  clearTimeout(flipTimer);
+  flipTimer=setTimeout(()=>{flip.classList.add("turned");back.querySelector("#card-close").focus({preventScroll:true})},reduce?0:550);
+}
+function closeCard(){clearTimeout(flipTimer);ov.hidden=true;if(lastTile){lastTile.classList.remove("on");lastTile.focus({preventScroll:true})}}
+front.addEventListener("click",()=>{clearTimeout(flipTimer);flip.classList.add("turned");back.querySelector("#card-close").focus({preventScroll:true})});
+document.getElementById("ov-scrim").addEventListener("click",closeCard);
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!ov.hidden)closeCard()});
+
+// ---- Navigation aktiv
+const links=[...document.querySelectorAll("a.nl")];
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});
+["ueber","strecke","skills","kontakt"].forEach(id=>io.observe(document.getElementById(id)));
+
+// ---- Kopieren
+document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",async()=>{
+  const v=document.getElementById(b.dataset.t);const txt=v.textContent.replace(/\s/g,b.dataset.t==="tel"?"":" ").trim();
+  try{await navigator.clipboard.writeText(txt);b.textContent="Kopiert";b.classList.add("done");setTimeout(()=>{b.textContent="Kopieren";b.classList.remove("done")},1600)}
+  catch(e){const r=document.createRange();r.selectNodeContents(v);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);b.textContent="Markiert"}
+}));
+</script>
