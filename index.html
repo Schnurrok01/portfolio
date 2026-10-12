@@ -110,6 +110,29 @@ svg .lbl{fill:var(--ink);font-family:var(--f-body);font-size:13px;font-weight:60
 .body .org a.ext{color:var(--muted);text-decoration-color:var(--c);text-decoration-thickness:1.5px}
 .body .org a.ext:hover{color:var(--c)}
 .body .org a.ext span{color:var(--c)}
+.stops-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:28px;font-size:14px;color:var(--muted)}
+.all-btn{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer}
+.all-btn:hover{border-color:var(--ink)}
+.stops-bar + .stops{margin-top:12px}
+.more-btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font:inherit;font-size:14px;font-weight:500;padding:6px 14px;border-radius:999px;border:1.5px solid var(--c);background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s}
+.more-btn:hover{background:color-mix(in srgb,var(--c) 14%,transparent)}
+.more-btn[aria-expanded="true"]{background:var(--c);color:var(--card)}
+.more-btn .chev{transition:transform .3s ease}
+.more-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s ease}
+.more.open{grid-template-rows:1fr}
+.more-wrap{overflow:hidden;min-height:0}
+.more-in{display:grid;gap:18px;margin-top:16px;padding-top:18px;border-top:1px dashed var(--rule);opacity:0;transform:translateY(-6px);transition:opacity .3s ease .05s,transform .3s ease .05s}
+.more.open .more-in{opacity:1;transform:none}
+.more-sec h4{margin:0 0 6px;font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.more-sec p{margin:0 0 10px;max-width:66ch}
+.more-sec p:last-child{margin-bottom:0}
+.more-sec p.ph{color:var(--muted);font-style:italic;font-size:14px;border:1px dashed var(--rule);border-radius:8px;padding:8px 12px;max-width:none}
+.more-skills{display:flex;flex-wrap:wrap;gap:6px}
+.mk{font:inherit;font-size:13px;display:inline-flex;align-items:center;gap:7px;padding:4px 10px 4px 4px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--c) 55%,transparent);background:color-mix(in srgb,var(--c) 10%,var(--card));color:var(--ink);cursor:pointer}
+.mk b{font-family:var(--f-display);font-weight:800;font-size:15px;color:var(--c);min-width:24px;text-align:center}
+.mk:hover{border-color:var(--c)}
+.stop.expanded .body{background:var(--card);border-color:var(--c)}
 @media (max-width:640px){
   .stop{grid-template-columns:22px minmax(0,1fr);gap:10px}
   .when{grid-column:2;grid-row:1;text-align:left;padding-top:14px}
@@ -281,7 +304,7 @@ footer{padding-block:28px 40px;font-family:var(--f-mono);font-size:12px;color:va
       <div>
         <p class="lead">Ich bin David, Technischer Projektmanager aus Remagen. Mir macht es Spaß, zwischen Technik und Kunden zu vermitteln und dafür zu sorgen, dass Projekte sauber laufen.</p>
         <p>Studiert habe ich zuerst Sportmedizinische Technik an der Hochschule Koblenz in Remagen. Dort ging es viel um Bewegungsanalyse, Sensoren und Programmierung. Danach habe ich den Master in Applied Physics gemacht, mit Fokus auf Data Science, Medizintechnik und KI.</p>
-        <p>Während des Studiums habe ich im Biomechaniklabor gearbeitet, zuletzt als stellvertretender Laborleiter, und dort Software für die Auswertung von Messdaten entwickelt. Nebenbei war ich beim Start-up CapaCon und habe eine Software gebaut, die Personen in Sporthallen erkennt und zählt, samt Server und Datenbank.</p>
+        <p>Während des Studiums habe ich im Biomechaniklabor gearbeitet, zuletzt als stellvertretender Laborleiter, und dort einen standardisierten Datensatz menschlicher Bewegungen aufgebaut. Nebenbei war ich beim Start-up CapaCon und habe die erste Version einer Software gebaut, die mit 3D-Sensoren die Auslastung von Sporthallen misst, samt Datenverbindung und Datenbank.</p>
         <p>Ich engagiere mich auch gern über den Job hinaus. An der Hochschule habe ich erst die BaRACke geleitet, unseren Studierendentreffpunkt, und war danach Vorsitzender des AStA. Seit Oktober 2025 bin ich bei voestalpine Signaling und koordiniere dort internationale Projekte, speziell in der Softwareentwicklung.</p>
       </div>
       <dl class="kv">
@@ -305,6 +328,7 @@ footer{padding-block:28px 40px;font-family:var(--f-mono);font-size:12px;color:va
     </div>
     <div class="map-box"><svg id="map" viewBox="0 0 1040 300" role="img" aria-label="Streckenplan der Laufbahn von 2019 bis heute"></svg></div>
     <p class="map-hint">Tippe auf eine Linie, um zur Station zu springen. Mit den Schaltern oben blendest du Linien aus.</p>
+    <div class="stops-bar"><span>Jede Station lässt sich für mehr Details aufklappen.</span><button class="all-btn" id="expand-all" aria-pressed="false">Alle Details öffnen</button></div>
     <ol class="stops" id="stops"></ol>
   </section>
 
@@ -347,29 +371,39 @@ footer{padding-block:28px 40px;font-family:var(--f-mono);font-size:12px;color:va
 <script>
 const LINES={job:{name:"Beruf",c:"--l-job"},edu:{name:"Studium",c:"--l-edu"},eng:{name:"Engagement",c:"--l-eng"}};
 const NOW=2026+9/12;
+// Ausführliche Texte pro Station. Leeres p = Platzhalter, der Text folgt.
+const MORE={
+ voest:[{h:"Das Unternehmen",p:"voestalpine Signaling entwickelt und produziert in Siershahn Diagnose- und Überwachungssysteme für den Schienenverkehr. Diese Systeme erkennen zum Beispiel über Sensoren Schäden an Zügen und Bauteilen, damit Probleme früh auffallen. Ein wichtiger Teil davon ist die Software, und genau dort arbeite ich."},{h:"Meine Rolle im Alltag",p:"Ich koordiniere die Softwareentwicklung für mehrere internationale Kundenprojekte gleichzeitig. Dabei bin ich die Schnittstelle zwischen allen Beteiligten. Ich stimme mich mit den Kunden und den Projektmanagern ab, übersetze die Anforderungen in konkrete Aufgaben für die Entwicklungsabteilung und begleite sie, bis die Software über die Qualitätssicherung (QA) und das Release Management beim Kunden ankommt.\n\nDen Überblick über inzwischen mehr als 20 Projekte behalte ich in Jira. Ich plane nach Scrum und achte darauf, dass Termine, Aufwände und Qualität zusammenpassen."},{h:"Projektbeispiele",p:"Neben der Projektarbeit habe ich in Python eine Software entwickelt, die die Aufwandsberechnung für die Forschung und Entwicklung (R&D) nahezu automatisiert."}],
+ lab:[{h:"Worum es im Labor ging",p:"Im Biomechaniklabor der Hochschule Koblenz ging es um die Analyse menschlicher Bewegung. Wir haben Bewegungen erfasst, ausgewertet und dafür eigene Software entwickelt. Ziel war es einerseits, Fehlstellungen und Krankheiten früh zu erkennen, und andererseits, Sportlerinnen und Sportler in ihren Bewegungsabläufen zu verbessern."},{h:"Meine Aufgaben",p:"Als stellvertretender Laborleiter habe ich die Studierenden unterstützt, die im Labor an ihren Projekten gearbeitet haben. Ich habe mit ihnen abgestimmt, wie es in den Projekten weitergeht, und ihnen geholfen, wenn sie bei Problemen nicht weiterkamen."},{h:"Mein Hauptprojekt",p:"Mein Hauptprojekt war der Aufbau eines standardisierten Datensatzes, der alle natürlichen Bewegungen des Menschen erfasst. Ich habe ihn konzipiert und die Aufnahmen durchgeführt. Für die Aufbereitung der Daten haben wir Machine Learning eingesetzt."}],
+ capa:[{h:"Die Idee hinter CapaCon",p:"CapaCon möchte Sporthallen und andere Sportstätten mithilfe von 3D-Sensoren besser auslasten und ungenutzte Zeiten sichtbar machen. So sollen Energie und Kosten gespart und vorhandene Sportflächen effizienter genutzt werden, ohne dabei einzelne Personen zu überwachen."},{h:"Was ich gebaut habe",p:"Ich habe das erste MVP gebaut, also die erste funktionsfähige Version des Produkts. Die Software hat aus den Ereignissen der 3D-Kameras ermittelt, wie viele Personen sich in bestimmten Zeiträumen in der Halle befinden.\n\nAußerdem habe ich die Datenverbindung über MQTT aufgebaut, über die die Daten von den Sensoren in eine MongoDB-Datenbank gelangen."},{h:"Herausforderungen",p:"Schwierig war vor allem, dass fast alles von Grund auf neu entwickelt werden musste, und das mit sehr wenig Budget für Infrastruktur. Deshalb waren pragmatische Lösungen gefragt, die mit wenigen Mitteln zuverlässig funktionieren."}],
+ msc:[{h:"Inhalte und Schwerpunkte",p:"Mein Schwerpunkt war die Medizintechnik, allerdings mit einem Data-Science- und Machine-Learning-Ansatz. Es ging also eher um die Forschungsseite der Medizintechnik: Wie lassen sich aus Messdaten verlässliche Aussagen gewinnen?\n\nDaneben spielten Softwareentwicklung, Software Engineering und Projektmanagement eine große Rolle. Viele Projekte im Studium bestanden darin, eine Idee nicht nur zu untersuchen, sondern sie auch als funktionierende Software umzusetzen."},{h:"Die Masterarbeit",p:"Meine Masterarbeit trägt den Titel „Entwicklung einer Open-Access-Plattform für Human-Activity-Recognition: Konzept und Umsetzung eines Random-Forest-Algorithmus“. Human Activity Recognition bedeutet, dass ein Algorithmus aus Bewegungsdaten automatisch erkennt, welche Tätigkeit ein Mensch gerade ausführt, zum Beispiel Gehen, Sitzen oder Treppensteigen.\n\nIch habe dafür eine frei zugängliche Plattform konzipiert und einen Random-Forest-Algorithmus umgesetzt, ein Machine-Learning-Verfahren zur Klassifikation. Projektmanagement war wichtig, um das Vorhaben effizient umzusetzen und alle Schritte zu koordinieren."}],
+ bsc:[{h:"Inhalte und Schwerpunkte",p:"Das Studium begann mit einem sehr technischen Grundstudium in Mathematik, Physik und Elektrotechnik. Darauf aufbauend rückte die Bewegungsanalyse immer mehr in den Mittelpunkt, und viele Fächer drehten sich darum, wie sich menschliche Bewegung messen und auswerten lässt.\n\nBesonders interessiert hat mich die angewandte Messtechnik und die physikalischen Prinzipien, die dahinterstecken: Wie wird aus einer Bewegung ein Messwert, und wie zuverlässig ist dieser Wert?"},{h:"Die Bachelorarbeit",p:"Meine Bachelorarbeit trägt den Titel „Entwicklung einer Multisensorbox mit Datenbanksystem zur vereinfachten Studiendurchführung“. Ziel war ein Messsystem, mit dem sich Studien zur Bewegungsanalyse einfacher durchführen lassen.\n\nDie Box habe ich auf Basis eines Raspberry Pi mit Beschleunigungssensoren entwickelt. Für die Speicherung der Messdaten habe ich zuerst MongoDB und später InfluxDB eingesetzt, eine Datenbank speziell für Zeitreihen wie Sensordaten."}],
+ asta:[{h:"Ausgangslage",p:"Der AStA, der Allgemeine Studierendenausschuss, ist die gewählte Vertretung der Studierenden an der Hochschule. Als ich den Vorsitz übernommen habe, kamen mehrere Dinge zusammen: die Folgen der Corona-Pandemie, die Ahrflut 2021 und eine hohe Fluktuation in den Gremien selbst.\n\nIn dieser Lage war es zunächst wichtig, wieder Stabilität hineinzubringen und den AStA verlässlich aufzustellen."},{h:"Meine Aufgaben als Vorsitzender",p:"Ich habe die regelmäßigen Sitzungen geleitet und die sechs Referate unterstützt, wenn es Fragen oder Probleme gab. Außerdem habe ich mit dem Finanzreferat zusammengearbeitet und den AStA in regelmäßigen Treffen mit der Hochschule und der Stadt Remagen vertreten."},{h:"Was wir erreicht haben",p:"Wir konnten am Campus wieder viele Veranstaltungen anbieten und so das Campusleben neu beleben. Nach den schwierigen Jahren war der Campus damit wieder ein Ort, an dem Studierende gern Zeit verbringen."}],
+ barack:[{h:"Was die BaRACke ist",p:"Die BaRACke ist die Studentenkneipe des AStA für die Studierenden des Campus in Remagen. Sie liegt nicht direkt auf dem Campus und ist ausschließlich für Studierende da. Geführt wird sie von fünf Studierenden, die sich die verschiedenen Aufgaben teilen, und ich hatte die Leitung dieses Teams."},{h:"Meine Aufgaben als Leiter",p:"Ich war für die gesamte Organisation zuständig und habe die anderen im Team bei ihren Aufgaben unterstützt. Dazu gehörten die Bereiche Finanzen, Öffentlichkeitsarbeit, Gebäude und Getränke. Außerdem habe ich die BaRACke in Gesprächen mit der Stadt Remagen und der Hochschule vertreten."},{h:"Was wir erreicht haben",p:"Während der Corona-Zeit haben wir die Bar komplett renoviert und modernisiert. Danach haben wir sie Schritt für Schritt wieder geöffnet und für alle Studierenden zugänglich gemacht."}]
+};
 const STOPS=[
  {id:"voest",line:"job",row:0,from:2025+9/12,to:NOW,when:"Okt 2025 – heute",now:true,
   title:"Technischer Projektmanager",org:"voestalpine Signaling, Siershahn",url:"https://www.voestalpine.com/railway-systems/de/produkte/digital-systems/diagnose-und-monitoring-rollendes-material/",
-  pts:["Koordination internationaler Softwareentwicklungsprojekte mit Jira im Multiprojektmanagement (über 20 Projekte)","Technische Übersetzung von Kundenanforderungen in umsetzbare Entwicklungsaufgaben","Machbarkeitsanalysen und Aufwandsschätzungen für internationale Kunden","Steuerung der Softwareentwicklung nach Scrum","Qualitätssicherung und Prozesskontrolle im Multiprojektmanagement"]},
+  pts:["Koordination internationaler Softwareentwicklungsprojekte mit Jira im Multiprojektmanagement (über 20 Projekte)","Technische Übersetzung von Kundenanforderungen in umsetzbare Entwicklungsaufgaben","Machbarkeitsanalysen und Aufwandsschätzungen für internationale Kunden","Steuerung der Softwareentwicklung nach Scrum","Qualitätssicherung und Prozesskontrolle im Multiprojektmanagement","Entwicklung einer Python-Software zur nahezu automatischen Aufwandsberechnung für R&D"]},
  {id:"msc",line:"edu",row:0,from:2023+9/12,to:2025+8/12,when:"2023 – 2025",
   title:"Master of Science, Applied Physics",org:"Universität Koblenz / HS Koblenz",url:"https://www.hs-koblenz.de/mut/applied-physics",
-  pts:["Schwerpunkt Data Science und Medizintechnik","Abschlussarbeit mit Schwerpunkt KI-Entwicklung und Projektmanagement"]},
+  pts:["Schwerpunkt Medizintechnik mit Data-Science- und Machine-Learning-Ansatz","Masterarbeit: Open-Access-Plattform für Human Activity Recognition mit Random-Forest-Algorithmus"]},
  {id:"lab",line:"job",row:0,from:2022+5/12,to:2025+8/12,when:"Jun 2022 – Aug 2025",
   title:"Wissenschaftlicher Mitarbeiter",org:"Biomechaniklabor, Hochschule Koblenz, Remagen",
-  pts:["Stellvertretende Laborleitung","Durchführung und Entwicklung von Auswertesoftware für Datenanalyse und Machine Learning"]},
+  pts:["Stellvertretende Laborleitung und Betreuung der studentischen Mitarbeitenden","Aufbau eines standardisierten Datensatzes aller natürlichen Bewegungen des Menschen","Datenaufbereitung mit Machine Learning"]},
  {id:"asta",line:"eng",row:0,from:2022,to:2024,when:"2022 – 2024",
   title:"AStA-Vorsitz",org:"Hochschule Koblenz",url:"https://www.hs-koblenz.de/studierende/studentische-gremien",
   pts:["Leitung des AStA mit 6 Referaten","Repräsentation in der Öffentlichkeit","Mitarbeit in verschiedenen internen Arbeitsgruppen der Hochschule"]},
  {id:"capa",line:"job",row:1,from:2022+2/12,to:2023+5/12,when:"Mär 2022 – Mai 2023",
   title:"Softwareentwickler",org:"Start-up CapaCon",
-  pts:["Aufbau einer Analysesoftware zur Zählung und Erkennung von Personen im Hallensport","Aufbau der zugehörigen Server- und Datenbankstruktur"],
+  pts:["Entwicklung des ersten MVP zur Personenzählung in Sporthallen mit 3D-Sensoren","Aufbau der Datenverbindung über MQTT und der MongoDB-Datenbank"],
   link:{href:"https://www.capa-con.de",text:"Eindruck meiner Arbeit: capa-con.de"}},
  {id:"barack",line:"eng",row:0,from:2020,to:2022,when:"2020 – 2022",
   title:"Leiter des Studierendentreffpunkts BaRACke",org:"AStA, Hochschule Koblenz",
-  pts:["Gebäudeinstandhaltung des Studierendentreffpunkts","Organisation der Bar","Treffen mit der Stadt Remagen und der Hochschule"]},
+  pts:["Leitung des fünfköpfigen studentischen Teams (Finanzen, PR, Gebäude, Getränke)","Renovierung und Modernisierung der Bar während der Corona-Zeit","Abstimmung mit der Stadt Remagen und der Hochschule"]},
  {id:"bsc",line:"edu",row:0,from:2019+9/12,to:2023+8/12,when:"2019 – 2023",
   title:"Bachelor of Science, Sportmedizinische Technik",org:"Hochschule Koblenz",url:"https://www.hs-koblenz.de/mut/sportmedizinische-technik",
-  pts:["Schwerpunkt Bewegungsanalyse und Programmierung","Abschlussarbeit zu Sensorentwicklung und Datenbank-Migration"]}
+  pts:["Schwerpunkt Bewegungsanalyse, mit technischem Grundstudium in Mathematik, Physik und Elektrotechnik","Bachelorarbeit: Multisensorbox mit Datenbanksystem auf Basis eines Raspberry Pi"]}
 ];
 
 // ---- Karte
@@ -415,10 +449,36 @@ sorted.forEach(s=>{
   li.style.setProperty("--c",`var(${LINES[s.line].c})`);
   li.innerHTML=`<div class="when">${s.when}</div><div class="rail" aria-hidden="true"></div>
   <div class="body"><span class="tag">${LINES[s.line].name}${s.now?" · aktuell":""}</span><h3>${s.title}</h3><div class="org">${s.url?`<a class="ext" href="${s.url}" target="_blank" rel="noopener">${s.org}<span aria-hidden="true"> ↗</span></a>`:s.org}</div>
-  <ul>${s.pts.map(p=>`<li>${p}</li>`).join("")}${s.link?`<li><a href="${s.link.href}" target="_blank" rel="noopener">${s.link.text}</a></li>`:""}</ul></div>`;
+  <ul>${s.pts.map(p=>`<li>${p}</li>`).join("")}${s.link?`<li><a href="${s.link.href}" target="_blank" rel="noopener">${s.link.text}</a></li>`:""}</ul>
+  ${MORE[s.id]?`<button class="more-btn" id="more-btn-${s.id}" aria-expanded="false" aria-controls="more-${s.id}"><span class="lbl-t">Mehr erfahren</span><svg class="chev" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <div class="more" id="more-${s.id}" role="region" aria-labelledby="more-btn-${s.id}"><div class="more-wrap" inert><div class="more-in"></div></div></div>`:""}</div>`;
   li.addEventListener("click",()=>select(s.id,false));
+  const mb=li.querySelector(".more-btn");
+  if(mb)mb.addEventListener("click",e=>{e.stopPropagation();toggleMore(s.id);select(s.id,false)});
   list.appendChild(li);
 });
+
+// ---- Details ausklappen
+function fillMore(id){
+  const box=document.querySelector(`#more-${id} .more-in`);if(box.dataset.done)return;
+  const secs=MORE[id].map(m=>`<div class="more-sec"><h4>${m.h}</h4>${m.p?m.p.split(/\n\n+/).map(t=>`<p>${t}</p>`).join(""):`<p class="ph">Text folgt.</p>`}</div>`).join("");
+  const used=(typeof EL!=="undefined")?EL.filter(e=>e.at.includes(id)):[];
+  const chips=used.length?`<div class="more-sec"><h4>Eingesetzte Skills</h4><div class="more-skills">${used.map(e=>`<button class="mk" data-s="${e.s}" style="--c:var(${CAT[e.cat].c})"><b>${e.s}</b>${e.n}</button>`).join("")}</div></div>`:"";
+  box.innerHTML=secs;box.dataset.done="1";
+  box.querySelectorAll(".mk").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();const e=EL.find(x=>x.s===b.dataset.s);openCard(e,document.getElementById("el-"+e.s))}));
+}
+function toggleMore(id,force){
+  const btn=document.getElementById("more-btn-"+id),box=document.getElementById("more-"+id);
+  const open=force!==undefined?force:btn.getAttribute("aria-expanded")!=="true";
+  if(open)fillMore(id);
+  btn.setAttribute("aria-expanded",open);btn.querySelector(".lbl-t").textContent=open?"Weniger anzeigen":"Mehr erfahren";
+  box.classList.toggle("open",open);box.firstElementChild.inert=!open;
+  document.getElementById("stop-"+id).classList.toggle("expanded",open);
+  syncAll();
+}
+const allBtn=document.getElementById("expand-all");
+function syncAll(){const bs=[...document.querySelectorAll(".more-btn")];const all=bs.every(b=>b.getAttribute("aria-expanded")==="true");allBtn.textContent=all?"Alle Details schließen":"Alle Details öffnen";allBtn.setAttribute("aria-pressed",all)}
+allBtn.addEventListener("click",()=>{const open=allBtn.getAttribute("aria-pressed")!=="true";Object.keys(MORE).forEach(id=>toggleMore(id,open))});
 
 function select(id,scroll){
   document.querySelectorAll(".stop.sel,.seg.sel").forEach(e=>e.classList.remove("sel"));
@@ -454,25 +514,25 @@ const CAT={
 };
 const SH="­";
 const EL=[
- {s:"Py",n:"Python",cat:"prog",x:1,y:1,what:"Programmiersprache für Datenanalyse, Automatisierung und Machine Learning.",did:"Entwicklung von Auswertesoftware für Datenanalyse und Machine Learning im Biomechaniklabor und im Master. Auch bei voestalpine setze ich Python ein.",at:["lab","msc","voest"]},
+ {s:"Py",n:"Python",cat:"prog",x:1,y:1,what:"Programmiersprache für Datenanalyse, Automatisierung und Machine Learning.",did:"Datenaufbereitung und Machine Learning im Biomechaniklabor und im Master. Bei voestalpine habe ich in Python eine Software zur Aufwandsberechnung für R&D gebaut.",at:["lab","msc","voest"]},
  {s:"Lf",n:"Leitung",cat:"lead",x:9,y:1,what:"Teams führen, Verantwortung tragen, Termine und Gremien koordinieren.",did:"Leitung des AStA mit 6 Referaten, Leitung der BaRACke und stellvertretende Laborleitung.",at:["asta","barack","lab"]},
  {s:"Cs",n:"C#",cat:"prog",x:1,y:2,what:"Objektorientierte Sprache für Anwendungen im .NET-Umfeld.",did:"Damit habe ich objektorientiertes Programmieren gelernt und angewendet: Klassen, Vererbung und sauber strukturierter Code.",at:["bsc"]},
- {s:"Mg",n:"MongoDB",cat:"prog",x:2,y:2,what:"Dokumentenorientierte NoSQL-Datenbank.",did:"Aufbau der Server- und Datenbankstruktur für die Personenzählung bei CapaCon und Datenbank-Migration in der Bachelorarbeit.",at:["capa","bsc"]},
+ {s:"Mg",n:"MongoDB",cat:"prog",x:2,y:2,what:"Dokumentenorientierte NoSQL-Datenbank.",did:"Bei CapaCon landen die Sensordaten über MQTT in einer MongoDB-Datenbank, die ich aufgebaut habe. In meiner Bachelorarbeit habe ich MongoDB und später InfluxDB für Sensordaten genutzt.",at:["capa","bsc"]},
  {s:"Sc",n:"Scrum",cat:"meth",x:4,y:2,what:"Agiles Vorgehen in kurzen Sprints mit festen Rollen und Terminen.",did:"Ich steuere die Softwareentwicklung nach Scrum und übersetze Kundenwünsche in umsetzbare Entwicklungsaufgaben. Auch im Biomechaniklabor habe ich mit Scrum gearbeitet.",at:["voest","lab"]},
  {s:"Kb",n:"Kanban",cat:"meth",x:5,y:2,what:"Visuelle Steuerung von Aufgaben über ein Board mit begrenzter paralleler Arbeit.",did:"Hilft mir, viele parallele Aufgaben und Projekte übersichtlich zu halten, bei voestalpine und im Biomechaniklabor.",at:["voest","lab"]},
  {s:"Mp",n:"Multiprojektmanagement",t:`Multi${SH}projekt${SH}manage${SH}ment`,cat:"meth",x:6,y:2,what:"Viele Projekte gleichzeitig planen, priorisieren und überwachen.",did:"Über 20 Softwareentwicklungsprojekte parallel bei voestalpine, inklusive Qualitätssicherung und Prozesskontrolle. Mehrere Projekte gleichzeitig habe ich auch im Biomechaniklabor betreut.",at:["voest","lab"]},
  {s:"Ma",n:"Machbarkeitsanalysen",t:`Machbar${SH}keits${SH}analysen`,cat:"meth",x:7,y:2,what:"Prüfen, ob und mit welchem Aufwand sich eine Anforderung umsetzen lässt.",did:"Ich erstelle Machbarkeitsanalysen und Aufwandsschätzungen für internationale Kunden.",at:["voest"]},
  {s:"Dt",n:"Design Thinking",cat:"meth",x:8,y:2,what:"Nutzerzentrierte Methode, um Probleme zu verstehen und Lösungen zu entwickeln.",did:"Teil meiner Arbeitsweise, wenn aus Kundenanforderungen konkrete Lösungen werden.",at:["voest","msc"]},
  {s:"Ka",n:"Kundenanforderungen",t:`Kunden${SH}anforde${SH}rungen`,cat:"lead",x:9,y:2,what:"Wünsche von Kunden verstehen und für Entwicklerteams greifbar machen.",did:"Technische Übersetzung von Kundenanforderungen in umsetzbare Entwicklungsaufgaben für internationale Kunden.",at:["voest"]},
- {s:"Ml",n:"Machine Learning",cat:"data",x:1,y:3,what:"Modelle, die aus Daten Muster lernen und Vorhersagen treffen.",did:"Auswertesoftware mit ML im Biomechaniklabor und KI-Entwicklung als Schwerpunkt der Masterarbeit.",at:["lab","msc"]},
- {s:"Da",n:"Datenanalyse",t:`Daten${SH}analyse`,cat:"data",x:2,y:3,what:"Messdaten aufbereiten, auswerten und verständlich darstellen.",did:"Bewegungsanalyse im Bachelor, Auswertung von Labordaten und Data Science im Master.",at:["lab","msc","bsc"]},
+ {s:"Ml",n:"Machine Learning",cat:"data",x:1,y:3,what:"Modelle, die aus Daten Muster lernen und Vorhersagen treffen.",did:"Aufbereitung des Bewegungsdatensatzes im Biomechaniklabor und ein Random-Forest-Algorithmus zur Erkennung menschlicher Aktivitäten in meiner Masterarbeit.",at:["lab","msc"]},
+ {s:"Da",n:"Datenanalyse",t:`Daten${SH}analyse`,cat:"data",x:2,y:3,what:"Messdaten aufbereiten, auswerten und verständlich darstellen.",did:"Bewegungsanalyse im Bachelor, der Bewegungsdatensatz im Biomechaniklabor und Data Science im Master.",at:["lab","msc","bsc"]},
  {s:"Jr",n:"Jira",cat:"tool",x:4,y:3,what:"Werkzeug für Ticket- und Projektverwaltung in Entwicklungsteams.",did:"Damit koordiniere ich über 20 internationale Softwareentwicklungsprojekte parallel: Anforderungen als Tickets, Fortschritt und Abhängigkeiten im Blick. Auch im Biomechaniklabor habe ich Aufgaben in Jira organisiert.",at:["voest","lab"]},
  {s:"Vs",n:"VS Code",cat:"tool",x:5,y:3,what:"Code-Editor für die tägliche Entwicklung.",did:"Meine Standardumgebung für Python- und Softwareprojekte.",at:["lab","capa"]},
  {s:"Mx",n:"MobaXterm",t:`Moba${SH}Xterm`,cat:"tool",x:6,y:3,what:"Terminal mit SSH für die Arbeit auf entfernten Servern.",did:"Zugriff auf Server, etwa beim Betrieb der CapaCon-Serverstruktur.",at:["capa"]},
  {s:"Tx",n:"LaTeX",cat:"tool",x:7,y:3,what:"Satzsystem für wissenschaftliche Dokumente.",did:"Für Abschlussarbeiten und wissenschaftliche Ausarbeitungen.",at:["bsc","msc"]},
  {s:"Of",n:"MS Office",cat:"tool",x:8,y:3,what:"Word, Excel, PowerPoint und Outlook im Arbeitsalltag.",did:"Für Auswertungen, Präsentationen und Projektdokumentation im Studium und Beruf.",at:["voest","asta"]},
  {s:"Rp",n:"Repräsentation",t:`Reprä${SH}sentation`,cat:"lead",x:9,y:3,what:"Eine Organisation nach außen vertreten und mit Partnern verhandeln.",did:"Repräsentation des AStA in der Öffentlichkeit und Treffen mit der Stadt Remagen und der Hochschule für die BaRACke.",at:["asta","barack"]},
- {s:"Se",n:"Sensorentwicklung",t:`Sensor${SH}ent${SH}wick${SH}lung`,cat:"data",x:1,y:4,what:"Messsysteme entwerfen, die physikalische Größen erfassen.",did:"Schwerpunkt meiner Bachelorarbeit, zusammen mit einer Datenbank-Migration.",at:["bsc"]},
+ {s:"Se",n:"Sensorentwicklung",t:`Sensor${SH}ent${SH}wick${SH}lung`,cat:"data",x:1,y:4,what:"Messsysteme entwerfen, die physikalische Größen erfassen.",did:"In meiner Bachelorarbeit habe ich auf einem Raspberry Pi eine Multisensorbox mit Beschleunigungssensoren entwickelt.",at:["bsc"]},
  {s:"Bw",n:"Bewegungsanalyse",t:`Bewe${SH}gungs${SH}analyse`,cat:"data",x:2,y:4,what:"Bewegungen des Körpers messen und biomechanisch auswerten.",did:"Schwerpunkt im Bachelor Sportmedizinische Technik.",at:["bsc"]},
  {s:"Mt",n:"Medizintechnik",t:`Medizin${SH}technik`,cat:"data",x:3,y:4,what:"Technik für Diagnose, Therapie und Gesundheit.",did:"Schwerpunkt im Master Applied Physics, zusammen mit Data Science.",at:["msc"]},
  {s:"De",n:"Deutsch",cat:"lang",lv:5,x:4,y:1,what:"Sehr gute Kenntnisse (5 von 5).",did:"Arbeitssprache in Studium, Labor, Gremienarbeit und Beruf.",at:["voest","asta"]},
